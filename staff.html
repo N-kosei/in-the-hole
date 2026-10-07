@@ -134,7 +134,13 @@
                 type="number"
                 id="waiting-input"
             >
+            
+            <button onclick="nextWaitingNumber()">
+                次の番号へ →
+            </button>
 
+            <p id="next-waiting-status"></p>
+            
             <button onclick="updateWaiting()">
                 待ち番号を更新
             </button>
@@ -370,6 +376,47 @@
     // 待ち番号更新
     // =========================
 
+
+    async function nextWaitingNumber() {
+    
+        // 現在の待ち番号を取得
+        const { data, error } = await supabaseClient
+            .from('waiting_info')
+            .select('waiting_number')
+            .eq('id', 1)
+            .single();
+    
+        if (error) {
+            console.error(error);
+            document.getElementById('next-waiting-status').textContent =
+                '現在の番号を取得できませんでした';
+            return;
+        }
+    
+        // 1つ進める
+        const nextNumber = data.waiting_number + 1;
+    
+        // Supabaseを更新
+        const { error: updateError } = await supabaseClient
+            .from('waiting_info')
+            .update({
+                waiting_number: nextNumber
+            })
+            .eq('id', 1);
+    
+        if (updateError) {
+            console.error(updateError);
+            document.getElementById('next-waiting-status').textContent =
+                '番号の更新に失敗しました';
+            return;
+        }
+    
+        document.getElementById('next-waiting-status').textContent =
+            'No. ' + nextNumber + ' に更新しました！';
+    
+        // スタッフ画面の表示も更新
+        loadWaiting();
+    }
     async function updateWaiting() {
 
         const number =
