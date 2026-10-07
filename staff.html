@@ -147,6 +147,24 @@
         <!-- ランキング -->
         <div class="box">
 
+            <h2>新しいスコアを登録</h2>
+
+            <div>
+                <label>プレイヤー名</label>
+                <input type="text" id="new-player-name" placeholder="プレイヤー名">
+            </div>
+
+            <div>
+                <label>スコア</label>
+                <input type="number" id="new-player-score" placeholder="スコア">
+            </div>
+
+            <button onclick="addRankingPlayer()">
+                スコアを登録
+            </button>
+
+            <p id="add-ranking-status"></p>
+            
             <h2>🏆 ランキング</h2>
 
             <div class="ranking-row">
@@ -435,7 +453,56 @@
     // =========================
     // ランキング更新
     // =========================
+    async function addRankingPlayer() {
 
+        const name =
+            document.getElementById('new-player-name').value.trim();
+
+        const score =
+            Number(document.getElementById('new-player-score').value);
+
+        // 入力チェック
+        if (name === '') {
+            document.getElementById('add-ranking-status').textContent =
+                'プレイヤー名を入力してください';
+            return;
+        }
+
+        if (!Number.isFinite(score)) {
+            document.getElementById('add-ranking-status').textContent =
+                'スコアを入力してください';
+            return;
+        }
+
+        // Supabaseに新しいプレイヤーを追加
+        const { error } = await supabaseClient
+            .from('ranking')
+            .insert({
+                player_name: name,
+                score: score
+            });
+
+        if (error) {
+            console.error(error);
+
+            document.getElementById('add-ranking-status').textContent =
+                '登録に失敗しました';
+
+            return;
+        }
+
+        // 成功
+        document.getElementById('add-ranking-status').textContent =
+            'スコアを登録しました！';
+
+        // 入力欄を空にする
+        document.getElementById('new-player-name').value = '';
+        document.getElementById('new-player-score').value = '';
+
+        // 現在のランキングを再読み込み
+        loadRanking();
+    }
+    
     async function updateRanking() {
 
         for (let i = 0; i < rankingData.length; i++) {
