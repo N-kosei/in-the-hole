@@ -305,23 +305,8 @@
 
             <h2>🏆 Ranking</h2>
 
-            <div class="ranking">
-
-                <div class="rank">
-                    <span class="rank-number">🥇 1位</span>
-                    <span class="score">980点</span>
-                </div>
-
-                <div class="rank">
-                    <span class="rank-number">🥈 2位</span>
-                    <span class="score">850点</span>
-                </div>
-
-                <div class="rank">
-                    <span class="rank-number">🥉 3位</span>
-                    <span class="score">720点</span>
-                </div>
-
+            <div class="ranking" id="ranking-list">
+                読み込み中...
             </div>
 
         </section>
@@ -407,6 +392,57 @@
             SUPABASE_URL,
             SUPABASE_PUBLISHABLE_KEY
         );
+
+        async function loadRanking() {
+            const { data, error } = await supabaseClient
+                .from('ranking')
+                .select('player_name, score')
+                .order('score', { ascending: false })
+                .limit(3);
+
+            if (error) {
+                console.error(error);
+
+                document.getElementById('ranking-list').textContent =
+                    'ランキングを読み込めませんでした';
+
+                return;
+            }
+
+            const rankingList = document.getElementById('ranking-list');
+
+            rankingList.innerHTML = '';
+
+            data.forEach((player, index) => {
+
+                const rank = document.createElement('div');
+                rank.className = 'rank';
+
+                let medal;
+
+                if (index === 0) {
+                    medal = '🥇';
+                } else if (index === 1) {
+                    medal = '🥈';
+                } else {
+                    medal = '🥉';
+                }
+
+                rank.innerHTML = `
+                    <span class="rank-number">
+                        ${medal} ${index + 1}位
+                    </span>
+
+                    <span class="score">
+                        ${player.score}点
+                    </span>
+        `        ;
+
+                rankingList.appendChild(rank);
+            });
+        }
+
+        loadRanking();
 
 
         async function loadWaitingNumber() {
