@@ -429,14 +429,18 @@
                 }
 
                 rank.innerHTML = `
-                    <span class="rank-number">
-                        ${medal} ${index + 1}位
-                    </span>
+            <span class="rank-number">
+                ${medal} ${index + 1}位
+            </span>
 
-                    <span class="score">
-                        ${player.score}点
-                    </span>
-        `        ;
+            <span class="player-name">
+                ${player.player_name}
+            </span>
+
+            <span class="score">
+                ${player.score}点
+            </span>
+`        ;
 
                 rankingList.appendChild(rank);
             });
