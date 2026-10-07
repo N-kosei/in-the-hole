@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>In the 掘～る スタッフページ</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        body {
+            font-family: sans-serif;
+            background: #f3e5d0;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5a351c;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: #8b5a2b;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .logout-button {
+            background: #777;
+            margin-top: 10px;
+        }
+
+        .ranking-row {
+            margin-bottom: 20px;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        #staff-panel {
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>⛏️ In the 掘～る<br>スタッフページ</h1>
+
+
+    <!-- ログイン -->
+    <div id="login-panel" class="box">
+
+        <h2>スタッフログイン</h2>
+
+        <label>メールアドレス</label>
+        <input
+            type="email"
+            id="email"
+            placeholder="staff@example.com"
+        >
+
+        <label>パスワード</label>
+        <input
+            type="password"
+            id="password"
+        >
+
+        <button onclick="login()">
+            ログイン
+        </button>
+
+        <div id="login-status" class="status"></div>
+
+    </div>
+
+
+    <!-- スタッフ操作画面 -->
+    <div id="staff-panel">
+
+
+        <!-- 待ち番号 -->
+        <div class="box">
+
+            <h2>🎫 待ち番号</h2>
+
+            <p>
+                現在の番号：
+                <strong id="current-waiting">読み込み中...</strong>
+            </p>
+
+            <label>新しい待ち番号</label>
+
+            <input
+                type="number"
+                id="waiting-input"
+            >
+
+            <button onclick="updateWaiting()">
+                待ち番号を更新
+            </button>
+
+            <div id="waiting-status" class="status"></div>
+
+        </div>
+
+
+        <!-- ランキング -->
+        <div class="box">
+
+            <h2>🏆 ランキング</h2>
+
+            <div class="ranking-row">
+
+                <h3>🥇 1位</h3>
+
+                <label>プレイヤー名</label>
+
+                <input
+                    type="text"
+                    id="name-1"
+                >
+
+                <label>スコア</label>
+
+                <input
+                    type="number"
+                    id="score-1"
+                >
+
+            </div>
+
+
+            <div class="ranking-row">
+
+                <h3>🥈 2位</h3>
+
+                <label>プレイヤー名</label>
+
+                <input
+                    type="text"
+                    id="name-2"
+                >
+
+                <label>スコア</label>
+
+                <input
+                    type="number"
+                    id="score-2"
+                >
+
+            </div>
+
+
+            <div class="ranking-row">
+
+                <h3>🥉 3位</h3>
+
+                <label>プレイヤー名</label>
+
+                <input
+                    type="text"
+                    id="name-3"
+                >
+
+                <label>スコア</label>
+
+                <input
+                    type="number"
+                    id="score-3"
+                >
+
+            </div>
+
+
+            <button onclick="updateRanking()">
+                ランキングを更新
+            </button>
+
+            <div id="ranking-status" class="status"></div>
+
+        </div>
+
+
+        <div class="box">
+
+            <button
+                class="logout-button"
+                onclick="logout()"
+            >
+                ログアウト
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =========================
+    // Supabase設定
+    // =========================
+
+    const SUPABASE_URL =
+        'https://okylctjknvtphzufkhnl.supabase.co';
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        '';
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+
+    // =========================
+    // ログイン
+    // =========================
+
+    async function login() {
+
+        const email =
+            document.getElementById('email').value;
+
+        const password =
+            document.getElementById('password').value;
+
+
+        const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+
+        if (error) {
+
+            console.error(error);
+
+            document.getElementById('login-status').textContent =
+                'ログインに失敗しました';
+
+            return;
+        }
+
+
+        document.getElementById('login-panel').style.display =
+            'none';
+
+        document.getElementById('staff-panel').style.display =
+            'block';
+
+
+        loadWaiting();
+        loadRanking();
+
+    }
+
+
+    // =========================
+    // ログアウト
+    // =========================
+
+    async function logout() {
+
+        await supabaseClient.auth.signOut();
+
+        document.getElementById('login-panel').style.display =
+            'block';
+
+        document.getElementById('staff-panel').style.display =
+            'none';
+
+    }
+
+
+    // =========================
+    // 待ち番号読み込み
+    // =========================
+
+    async function loadWaiting() {
+
+        const { data, error } =
+            await supabaseClient
+                .from('waiting_info')
+                .select('waiting_number')
+                .eq('id', 1)
+                .single();
+
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+        }
+
+
+        document.getElementById('current-waiting').textContent =
+            'No. ' + data.waiting_number;
+
+        document.getElementById('waiting-input').value =
+            data.waiting_number;
+
+    }
+
+
+    // =========================
+    // 待ち番号更新
+    // =========================
+
+    async function updateWaiting() {
+
+        const number =
+            Number(
+                document.getElementById('waiting-input').value
+            );
+
+
+        const { error } =
+            await supabaseClient
+                .from('waiting_info')
+                .update({
+                    waiting_number: number
+                })
+                .eq('id', 1);
+
+
+        if (error) {
+
+            console.error(error);
+
+            document.getElementById('waiting-status').textContent =
+                '更新に失敗しました';
+
+            return;
+        }
+
+
+        document.getElementById('waiting-status').textContent =
+            '待ち番号を更新しました！';
+
+        loadWaiting();
+
+    }
+
+
+    // =========================
+    // ランキング読み込み
+    // =========================
+
+    let rankingData = [];
+
+
+    async function loadRanking() {
+
+        const { data, error } =
+            await supabaseClient
+                .from('ranking')
+                .select('id, player_name, score')
+                .order('score', { ascending: false })
+                .limit(3);
+
+
+        if (error) {
+
+            console.error(error);
+
+            return;
+        }
+
+
+        rankingData = data;
+
+
+        data.forEach((player, index) => {
+
+            document.getElementById(
+                'name-' + (index + 1)
+            ).value = player.player_name;
+
+
+            document.getElementById(
+                'score-' + (index + 1)
+            ).value = player.score;
+
+        });
+
+    }
+
+
+    // =========================
+    // ランキング更新
+    // =========================
+
+    async function updateRanking() {
+
+        for (let i = 0; i < rankingData.length; i++) {
+
+            const id =
+                rankingData[i].id;
+
+
+            const name =
+                document.getElementById(
+                    'name-' + (i + 1)
+                ).value;
+
+
+            const score =
+                Number(
+                    document.getElementById(
+                        'score-' + (i + 1)
+                    ).value
+                );
+
+
+            const { error } =
+                await supabaseClient
+                    .from('ranking')
+                    .update({
+                        player_name: name,
+                        score: score
+                    })
+                    .eq('id', id);
+
+
+            if (error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    'ranking-status'
+                ).textContent =
+                    'ランキングの更新に失敗しました';
+
+                return;
+
+            }
+
+        }
+
+
+        document.getElementById(
+            'ranking-status'
+        ).textContent =
+            'ランキングを更新しました！';
+
+
+        loadRanking();
+
+    }
+
+</script>
+
+</body>
+</html>
