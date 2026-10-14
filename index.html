@@ -23,43 +23,22 @@
             min-height: 100vh;
         }
 
-        /* =========================
-           ヘッダー
-        ========================= */
-
-        header {
-            text-align: center;
-            padding: 35px 20px 25px;
-            background: rgba(0, 0, 0, 0.25);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            color: #ffd966;
-            text-shadow: 3px 3px 0 #4a2c18;
-        }
-
-        header p {
-            margin-top: 10px;
-            font-size: 1.1rem;
-        }
 
         /* =========================
            タブ
         ========================= */
-
+        
         .tabs {
             display: flex;
             justify-content: center;
             gap: 5px;
-            background: #2c1b12;
+            background: rgba(44, 27, 18, 0.25);
             padding: 10px;
         }
-
+        
         .tab-button {
-            border: none;
-            background: #5c4030;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(92, 64, 48, 0.3);
             color: white;
             padding: 12px 25px;
             font-size: 1rem;
@@ -68,16 +47,18 @@
             border-radius: 8px 8px 0 0;
             transition: 0.2s;
         }
-
+        
         .tab-button:hover {
-            background: #79543a;
+            background: rgba(121, 84, 58, 0.5);
         }
-
+        
         /* 選択中のタブ */
         .tab-button.active {
-            background: #d9a441;
-            color: #3b271c;
+            background: rgba(217, 164, 65, 0.65);
+            color: #ffffff;
+            border-color: rgba(255, 220, 150, 0.5);
         }
+
 
         /* =========================
            メイン
