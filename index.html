@@ -225,207 +225,32 @@
             }
         }
         
-        /* ===== In the 掘～る：洞窟・宝探しテーマ ===== */
-        
-        :root {
-            --cave-dark: #171a22;
-            --cave-panel: #252a35;
-            --cave-stone: #393d49;
-            --gem-blue: #55e6e0;
-            --gem-purple: #b59aff;
-            --treasure-gold: #ffd477;
-            --text-main: #f8f1df;
-            --text-sub: #c5c7d0;
-        }
-        
-        /* ページ全体：洞窟の奥行きを表現 */
+
+        /* 洞窟イラストをページ背景に設定 */
         body {
-            background:
-                radial-gradient(
-                    ellipse at 15% 15%,
-                    rgba(77, 79, 117, 0.32),
-                    transparent 35%
-                ),
-                radial-gradient(
-                    ellipse at 85% 45%,
-                    rgba(38, 117, 123, 0.22),
-                    transparent 32%
-                ),
+            background-color: #171a22;
+            background-image:
                 linear-gradient(
-                    160deg,
-                    #20232d 0%,
-                    #171a22 55%,
-                    #30252a 100%
-                );
+                    rgba(15, 18, 28, 0.35),
+                    rgba(15, 18, 28, 0.55)
+                ),
+                url("images/cave-background.png");
         
-            color: var(--text-main);
-            font-family: "Trebuchet MS", "Yu Gothic", sans-serif;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         
-        /* 見出し */
-        h2 {
-            color: var(--treasure-gold);
-            text-shadow: 0 0 14px rgba(255, 212, 119, 0.2);
-            letter-spacing: 0.04em;
-        }
-        
-        h3 {
-            color: var(--gem-blue);
-            border-bottom: 1px solid rgba(85, 230, 224, 0.35);
-            padding-bottom: 8px;
-            margin-top: 28px;
-        }
-        
-        /* ゲーム紹介・各コンテンツ */
+        /* コンテンツを背景から読みやすくする */
         #top,
         #ranking,
         #waiting {
-            color: var(--text-main);
+            background-color: rgba(20, 25, 38, 0.88);
+            border-radius: 14px;
+            padding: 24px;
         }
-        
-        /* 動画を洞窟のスクリーン風に */
-        .video-box {
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    #33394a 0%,
-                    #151820 75%
-                );
-        
-            border: 2px solid #686477;
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow:
-                0 0 0 4px rgba(181, 154, 255, 0.08),
-                0 0 25px rgba(85, 230, 224, 0.12);
-            overflow: hidden;
-        }
-        
-        .video-box video,
-        .video-box iframe {
-            display: block;
-            width: 100%;
-            max-width: 100%;
-            border-radius: 8px;
-        }
-        
-        /* ランキングの各行 */
-        .rank {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(
-                110deg,
-                rgba(62, 66, 82, 0.95),
-                rgba(35, 39, 51, 0.95)
-            );
-            border: 1px solid rgba(181, 154, 255, 0.22);
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin: 10px 0;
-            color: var(--text-main);
-            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.16);
-        }
-        
-        /* 順位 */
-        .rank-number {
-            color: var(--treasure-gold);
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        
-        /* プレイヤー名 */
-        .player-name {
-            flex: 1;
-            text-align: center;
-            overflow-wrap: anywhere;
-        }
-        
-        /* スコア */
-        .score {
-            color: var(--gem-blue);
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        
-        /* 待ち番号の表示 */
-        #waiting-number,
-        #current-waiting {
-            color: var(--treasure-gold);
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        
-        /* 次の番号 */
-        #next-number {
-            color: var(--gem-blue);
-            font-size: 1.3em;
-            font-weight: bold;
-        }
-        
-        /* タブやボタン */
-        button {
-            background: linear-gradient(
-                135deg,
-                #65518e,
-                #3b6380
-            );
-            color: #ffffff;
-            border: 1px solid rgba(181, 154, 255, 0.55);
-            border-radius: 10px;
-            padding: 10px 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition:
-                transform 0.18s ease,
-                box-shadow 0.18s ease,
-                filter 0.18s ease;
-        }
-        
-        button:hover {
-            filter: brightness(1.18);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 18px rgba(85, 230, 224, 0.16);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        /* 入力欄 */
-        input {
-            background: #171a22;
-            color: var(--text-main);
-            border: 1px solid #666b7b;
-            border-radius: 8px;
-            padding: 10px;
-        }
-        
-        input:focus {
-            outline: 2px solid var(--gem-blue);
-            outline-offset: 2px;
-        }
-        
-        /* スマートフォン向け */
-        @media (max-width: 600px) {
-            .rank {
-                gap: 8px;
-                padding: 12px 10px;
-                font-size: 0.92rem;
-            }
-        
-            .video-box {
-                padding: 6px;
-            }
-        
-            .video-box iframe {
-                height: 240px;
-            }
-        
-            button {
-                max-width: 100%;
-            }
-        }
+
 
     </style>
 </head>
