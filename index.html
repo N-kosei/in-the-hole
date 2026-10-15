@@ -222,6 +222,23 @@
                 font-size: 3rem;
             }
         }
+
+              /* スマホ用の背景 */
+        @media (max-width: 600px) {
+            body {
+                background-image:
+                    linear-gradient(
+                        rgba(15, 18, 28, 0.35),
+                        rgba(15, 18, 28, 0.55)
+                    ),
+                    url("cave-background-mobile.png");
+        
+                background-size: cover;
+                background-position: center top;
+                background-repeat: no-repeat;
+                background-attachment: scroll;
+            }
+        }
         
 
         /* 洞窟イラストをページ背景に設定 */
@@ -240,22 +257,7 @@
             background-attachment: fixed;
         }
         
-        /* スマホ用の背景 */
-        @media (max-width: 600px) {
-            body {
-                background-image:
-                    linear-gradient(
-                        rgba(15, 18, 28, 0.35),
-                        rgba(15, 18, 28, 0.55)
-                    ),
-                    url("cave-background-mobile.png");
-        
-                background-size: cover;
-                background-position: center top;
-                background-repeat: no-repeat;
-                background-attachment: scroll;
-            }
-        }
+  
 
         
         /* コンテンツを背景から読みやすくする */
