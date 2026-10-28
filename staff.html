@@ -378,9 +378,8 @@
 
 
     async function nextWaitingNumber() {
-    
         // 現在の待ち番号を取得
-        const { data, error } = await supabaseClient
+        const { data, error } = await supabase
             .from('waiting_info')
             .select('waiting_number')
             .eq('id', 1)
@@ -388,28 +387,26 @@
     
         if (error) {
             console.error(error);
-            document.getElementById('next-waiting-status').textContent =
-                '現在の番号を取得できませんでした';
+            alert('待ち番号の取得に失敗しました');
             return;
         }
     
-        // 1つ進める
-        const nextNumber = data.waiting_number + 1;
+        // 20の次は1に戻す
+        const nextNumber = data.waiting_number % 20 + 1;
     
-        // Supabaseを更新
-        const { error: updateError } = await supabaseClient
+        // 次の番号に更新
+        const { error: updateError } = await supabase
             .from('waiting_info')
-            .update({
-                waiting_number: nextNumber
-            })
+            .update({ waiting_number: nextNumber })
             .eq('id', 1);
     
         if (updateError) {
             console.error(updateError);
-            document.getElementById('next-waiting-status').textContent =
-                '番号の更新に失敗しました';
+            alert('待ち番号の更新に失敗しました');
             return;
         }
+    
+        
     
         document.getElementById('next-waiting-status').textContent =
             'No. ' + nextNumber + ' に更新しました！';
