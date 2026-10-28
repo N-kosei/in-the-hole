@@ -379,7 +379,7 @@
 
     async function nextWaitingNumber() {
         // 現在の待ち番号を取得
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('waiting_info')
             .select('waiting_number')
             .eq('id', 1)
@@ -395,7 +395,7 @@
         const nextNumber = data.waiting_number % 20 + 1;
     
         // 次の番号に更新
-        const { error: updateError } = await supabase
+        const { error: updateError } = await supabaseClient
             .from('waiting_info')
             .update({ waiting_number: nextNumber })
             .eq('id', 1);
