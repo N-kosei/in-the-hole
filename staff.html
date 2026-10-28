@@ -420,7 +420,12 @@
             Number(
                 document.getElementById('waiting-input').value
             );
-
+        
+        if (!Number.isInteger(number) || number < 1 || number > 20) {
+            document.getElementById('waiting-status').textContent =
+                '1～20の番号を入力してください';
+            return;
+        }
 
         const { error } =
             await supabaseClient
