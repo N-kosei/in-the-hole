@@ -580,7 +580,7 @@
             document.getElementById('waiting-number').textContent =
                 'No. ' + data.waiting_number;
             document.getElementById('next-number').textContent =
-                'No. ' + (data.waiting_number + 1);
+                'No. ' + (data.waiting_number % 20 + 1);
         }
 
 
